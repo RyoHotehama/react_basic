@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  mysql:
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    container_name: mysql
+    tty: true
+    restart: always
+    ports: 
+      - 3306:3306
+    networks:
+      - react-basic
+  redis:
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
+    container_name: redis
+    tty: true
+    ports:
+      - 6379:6379
+    networks:
+      - react-basic
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    volumes:
+      - ./api:/var/www/html/app/react_basic/api
+      # - ./api/.bundle:/usr/local/bundle
+    container_name: api
+    stdin_open: true
+    tty: true
+    ports:
+      - 3001:3001
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - react-basic
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - ./client:/var/www/html/app/react_basic/client
+      - ./client/node_modules:/var/www/html/app/react_basic/client/node_modules
+    container_name: client
+    tty: true
+    ports:
+      - 3000:3000
+    networks:
+      - react-basic
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    container_name: nginx
+    tty: true
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - api
+      - client
+    networks:
+      - react-basic
+networks:
+  react-basic:
+    driver: bridge
