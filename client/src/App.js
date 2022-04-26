@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import CountUpDown from'./components/CountUpDown.jsx';
 import HelloReact from'./components/HelloReact.jsx';
 import Navigation from'./components/Navigation.jsx';
-import CountUpDown from'./components/CountUpDown.jsx';
+
 function app() {
   return(
   <Router>
