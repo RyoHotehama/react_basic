@@ -11,6 +11,9 @@ export default class Navigation extends React.Component {
         <li>
           <Link to = "/count-up-down">CountUpdown</Link>
         </li>
+        <li>
+          <Link to = "/sign-up">SignUp</Link>
+        </li>
       </div>      
     );
   }
